@@ -10,19 +10,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
+import embedded.korea.ac.kr.emoodchart.api.Api;
+import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
+import embedded.korea.ac.kr.emoodchart.api.ApiService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 사용자 고유 아이디를 서버로 할당받고, 사용되는 서비스들을 초기화함
+ * 앱을 시작하면 기존에 설정된 아이디가 있는지 확인하고, 해당 아이디가 유효한지를 서버를 통해 확인함
+ * 아니라면 새로운 아이디를 할당받기 위해서는 두 가지 프로세스가 존재함
+ * - fitbit 아이디를 통한 확인
+ * - 화면에 고유 아이디를 표시한 후, 관리자 페이지에서 이를 입력하면 해당 아이디와 결합되도록 함
  */
 public class MainActivity extends Activity implements OnClickListener, Response.ErrorListener, Response.Listener<String>, Runnable {
     SharedPreferences pfSetting;
-    RequestQueue rq;
     Handler handler = new Handler();
     Spinner prjSpinner, instSpinner, availIdSpinner;
     Button startBtn;
@@ -35,17 +44,23 @@ public class MainActivity extends Activity implements OnClickListener, Response.
     
     int instId,prjId,userId;
     String hash;
+    ApiService api = Api.getService();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        pfSetting	= getSharedPreferences("setting", MODE_PRIVATE);
-        userId		= pfSetting.getInt("userId", 0);
-        instId		= pfSetting.getInt("instId", 0);
-        prjId		= pfSetting.getInt("projectId", 0);
-        hash		= pfSetting.getString("hash","");
-        rq = Volley.newRequestQueue(this);
+        api.checkAuth(iid,pid, uid, hash).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+            }
+        });
         
         if (userId != 0) {
             checkUserId();

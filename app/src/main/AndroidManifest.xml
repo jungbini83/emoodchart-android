@@ -1,11 +1,46 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="embedded.korea.ac.kr.emoodchart">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.intent.action.QUICKBOOT_POWERON" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application android:allowBackup="true"
                  android:label="@string/app_name"
                  android:icon="@mipmap/ic_launcher"
 
                  android:theme="@style/AppTheme">
+
+        <receiver
+            android:name=".LightReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".eMoodChartReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="package" />
+
+                <action android:name="android.intent.action.ACTION_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.ACTION_MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".eMoodChartService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".LightUploadService"
+            android:enabled="true"
+            android:exported="false" />
 
     </application>
 
