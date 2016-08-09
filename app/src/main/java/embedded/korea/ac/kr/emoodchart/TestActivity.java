@@ -147,7 +147,7 @@ public class TestActivity extends Activity implements SensorEventListener, Runna
     @Override
     public void onClick(View v) {
         //R.id.start Only
-        service = new Intent(this, eMoodChartService.class);
+        service = new Intent(this, EMCService.class);
         startService(service);
     }
     public void checkUpdate()

@@ -13,11 +13,11 @@
                  android:theme="@style/AppTheme">
 
         <receiver
-            android:name=".LightReceiver"
+            android:name=".EMCScreenEventReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".eMoodChartReceiver"
+            android:name=".EMCReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -34,11 +34,11 @@
         </receiver>
 
         <service
-            android:name=".eMoodChartService"
+            android:name=".EMCService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".LightUploadService"
+            android:name=".EMCDataUploadService"
             android:enabled="true"
             android:exported="false" />
 
