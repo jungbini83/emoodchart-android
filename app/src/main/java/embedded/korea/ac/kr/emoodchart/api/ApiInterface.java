@@ -1,6 +1,5 @@
 package embedded.korea.ac.kr.emoodchart.api;
 
-import com.google.gson.Gson;
 import embedded.korea.ac.kr.emoodchart.UserInfo;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -11,10 +10,11 @@ import java.util.Map;
  * Created by Skais on 2016-08-09.
  */
 public class ApiInterface {
-    private ApiService service;
+    public ApiService service;
+
     public ApiInterface() {
         this.service = new Retrofit.Builder()
-                .baseUrl("https://")
+                .baseUrl("http://52.68.83.209/api/")
                 .build()
                 .create(ApiService.class);
     }
@@ -27,7 +27,12 @@ public class ApiInterface {
         return service.uploadLight(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash(), body);
     }
 
+    public Call<ApiResponse> checkApkUpdate() {
+        return service.checkUpdate("3.0");
+    }
+
     public static String genSurveyUrl(UserInfo user) {
         return null;
     }
+    public static String genApkUrl() { return null; }
 }

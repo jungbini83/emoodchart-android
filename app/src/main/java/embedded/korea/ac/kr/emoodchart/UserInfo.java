@@ -12,52 +12,40 @@ public class UserInfo {
     private int projId;
     private String hash;
 
-    public UserInfo(Context ctx) {
-        SharedPreferences pf = ctx.getSharedPreferences("setting", ctx.MODE_PRIVATE);
-
-        setUserId(pf.getInt("uid", 0));
-        setProjId(pf.getInt("pid",0));
-        setInstId(pf.getInt("iid",0));
-        setHash(pf.getString("hash", ""));
+    private UserInfo(int iid, int pid, int uid, String hash) {
+        this.instId = iid;
+        this.projId = pid;
+        this.userId = uid;
+        this.hash = hash;
     }
 
-    public UserInfo() {
+    UserInfo(Context ctx) {
+        SharedPreferences pf = ctx.getSharedPreferences("user", Context.MODE_PRIVATE);
 
+        this.userId = pf.getInt("uid", 0);
+        this.instId = pf.getInt("iid",0);
+        this.projId = pf.getInt("pid",0);
+        this.hash = pf.getString("hash", "");
     }
 
-    public boolean isValid() {
+    static void set(Context ctx, int iid, int pid, int uid, String hash) {
+        SharedPreferences pf = ctx.getSharedPreferences("user", Context.MODE_PRIVATE);
+        pf.edit().putInt("uid", uid).putInt("iid", iid).putInt("pid", pid).putString("hash", hash).apply();
+    }
+
+    boolean isValid() {
         return getUserId() != 0;
     }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public int getUserId() {
         return userId;
     }
-
     public int getInstId() {
         return instId;
     }
-
-    public void setInstId(int instId) {
-        this.instId = instId;
-    }
-
     public int getProjId() {
         return projId;
     }
-
-    public void setProjId(int projId) {
-        this.projId = projId;
-    }
-
     public String getHash() {
         return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
     }
 }
