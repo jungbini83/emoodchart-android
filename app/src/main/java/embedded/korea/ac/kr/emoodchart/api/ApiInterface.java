@@ -1,6 +1,8 @@
 package embedded.korea.ac.kr.emoodchart.api;
 
+import com.google.gson.JsonObject;
 import embedded.korea.ac.kr.emoodchart.UserInfo;
+import retrofit2.GsonConverterFactory;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -14,21 +16,27 @@ public class ApiInterface {
 
     public ApiInterface() {
         this.service = new Retrofit.Builder()
-                .baseUrl("http://52.68.83.209/api/")
+                //.baseUrl("http://52.68.83.209/api/")
+                .baseUrl("http://10.16.16.125:4000/api/v2/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiService.class);
     }
 
-    public Call<ApiResponse> checkAuth(UserInfo info) {
+    public Call<JsonObject> checkAuth(UserInfo info) {
         return service.checkAuth(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash());
     }
 
-    public Call<ApiResponse> uploadLight(UserInfo info, Map<String, Float> body) {
+    public Call<JsonObject> uploadLight(UserInfo info, Map<String, Float> body) {
         return service.uploadLight(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash(), body);
     }
 
-    public Call<ApiResponse> checkApkUpdate() {
+    public Call<JsonObject> checkApkUpdate() {
         return service.checkUpdate("3.0");
+    }
+
+    public Call<JsonObject> codeAuth(String code) {
+        return service.codeAuth(code);
     }
 
     public static String genSurveyUrl(UserInfo user) {

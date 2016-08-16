@@ -17,6 +17,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import com.google.gson.JsonObject;
 import embedded.korea.ac.kr.emoodchart.api.ApiInterface;
 import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
 import retrofit2.Call;
@@ -193,7 +194,7 @@ public class EMCService extends Service implements SensorEventListener {
     /**
      * 새로운 데이터가 추가될 때마다 새롭게 생성하며 데이터의 업로드의 성공, 실패에 따라 데이터베이스를 조작하는 역할을 수행함
      */
-    private class Uploader implements Callback<ApiResponse> {
+    private class Uploader implements Callback<JsonObject> {
         private long mKey;
         private float mValue;
 
@@ -209,7 +210,7 @@ public class EMCService extends Service implements SensorEventListener {
         }
 
         @Override
-        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
             // 성공했을 경우에는 데이터베이스에 존재했던 데이터들은 삭제하고 마무리한다
             SQLiteDatabase open = mDB.getWritableDatabase();
 
@@ -221,7 +222,7 @@ public class EMCService extends Service implements SensorEventListener {
         }
 
         @Override
-        public void onFailure(Call<ApiResponse> call, Throwable t) {
+        public void onFailure(Call<JsonObject> call, Throwable t) {
             // 업로드가 실패했을 경우에는 기존에 저장되어 있던 데이터는 원래대로 복구하고
             // 새로 수집했던 데이터를 데이터베이스에 추가한다
 

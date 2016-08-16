@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.gson.JsonObject;
 import embedded.korea.ac.kr.emoodchart.api.ApiInterface;
 import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
 import retrofit2.Call;
@@ -65,14 +66,14 @@ public class StatusActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                mApi.checkApkUpdate().enqueue(new Callback<ApiResponse>() {
+                mApi.checkApkUpdate().enqueue(new Callback<JsonObject>() {
                     @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
 //                        int errCode = t.networkResponse.statusCode;
 //                        if(errCode == 302)
 //                        {
