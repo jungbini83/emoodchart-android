@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import com.google.gson.JsonObject;
 import embedded.korea.ac.kr.emoodchart.api.*;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,16 +27,16 @@ public class MainActivity extends Activity {
         UserInfo info = new UserInfo(this);
 
         if (info.isValid()) {
-			api.checkAuth(info).enqueue(new Callback<JsonObject>() {
+			api.checkAuth(info).enqueue(new Callback<ApiResponse>() {
 				@Override
-				public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+				public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     //TODO: 성공여부 확인 후 다음 창으로 넘어감
                     // 실패일 경우에는 failure 상태일 때의 행동으로 넘어감
                     onAuthorized();
 				}
 
 				@Override
-				public void onFailure(Call<JsonObject> call, Throwable t) {
+				public void onFailure(Call<ApiResponse> call, Throwable t) {
                     //TODO: 기존 방법으로 로그인 실패, 어떤 방식으로 로그인 할 것인가 정하도록 함
                     // 1. 관리자가 발급한 issue ID를 통한 로그인
                     // 2. fitbit 계정을 통한 로그인

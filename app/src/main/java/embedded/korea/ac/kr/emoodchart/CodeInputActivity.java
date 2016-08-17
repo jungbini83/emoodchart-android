@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import com.google.gson.JsonObject;
 import embedded.korea.ac.kr.emoodchart.api.ApiInterface;
 import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
 import retrofit2.Call;
@@ -33,7 +32,7 @@ public class CodeInputActivity extends AppCompatActivity {
         codeConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String code = codeEdit.getText().toString();
+                int code = Integer.parseInt(codeEdit.getText().toString());
                 sendCodeToServer(code);
             }
         });
@@ -46,16 +45,16 @@ public class CodeInputActivity extends AppCompatActivity {
         });
 
     }
-    private void sendCodeToServer(String code)
+    private void sendCodeToServer(int code)
     {
         final Context ctx = this.getBaseContext();
         final SharedPreferences pfSetting	= getSharedPreferences("setting", MODE_PRIVATE);
 
         ApiInterface api = new ApiInterface();
 
-        api.codeAuth(code).enqueue(new Callback<JsonObject>() {
+        api.authenticate(code).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 Log.v("teemo",response.body().toString() );
                 /*
@@ -71,7 +70,7 @@ public class CodeInputActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 //Fail
             }
         });
