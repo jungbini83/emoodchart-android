@@ -120,13 +120,13 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;</code></td>
+<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../embedded/korea/ac/kr/emoodchart/api/ApiService.html#authenticate-int-">authenticate</a></span>(int&nbsp;code)</code>
 <div class="block">부여받은 authentication code를 이용하여 로그인을 시도함</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;</code></td>
+<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../embedded/korea/ac/kr/emoodchart/api/ApiService.html#checkAuth-int-int-int-java.lang.String-">checkAuth</a></span>(int&nbsp;iid,
          int&nbsp;pid,
          int&nbsp;ident,
@@ -139,17 +139,17 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;</code></td>
+<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../embedded/korea/ac/kr/emoodchart/api/ApiService.html#checkUpdate-java.lang.String-">checkUpdate</a></span>(java.lang.String&nbsp;version)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;</code></td>
+<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../embedded/korea/ac/kr/emoodchart/api/ApiService.html#loginWithFitbit--">loginWithFitbit</a></span>()</code>
 <div class="block">Fitbit을 이용하여 로그인을 시도한다.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;</code></td>
+<td class="colFirst"><code>retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../embedded/korea/ac/kr/emoodchart/api/ApiService.html#uploadLight-int-int-int-java.lang.String-java.util.Map-">uploadLight</a></span>(int&nbsp;iid,
            int&nbsp;pid,
            int&nbsp;ident,
@@ -180,7 +180,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>uploadLight</h4>
 <pre>@POST(value="inst/{iid}/proj/{pid}/user/{ident}/light")
-retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;uploadLight(@Path(value="iid")
+retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;&nbsp;uploadLight(@Path(value="iid")
                                                                                                                                      int&nbsp;iid,
                                                                                                                                      @Path(value="pid")
                                                                                                                                      int&nbsp;pid,
@@ -212,7 +212,7 @@ retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;uploa
 <li class="blockList">
 <h4>loginWithFitbit</h4>
 <pre>@POST(value="/auth/fitbit")
-retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;loginWithFitbit()</pre>
+retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;&nbsp;loginWithFitbit()</pre>
 <div class="block">Fitbit을 이용하여 로그인을 시도한다.<br>
  500 - 서버 자체 에러<br>
  200 - 성공적으로 처리됨<br></div>
@@ -234,7 +234,7 @@ retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;login
 <li class="blockList">
 <h4>authenticate</h4>
 <pre>@GET(value="/auth/{code}")
-retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;authenticate(@Path(value="code")
+retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;&nbsp;authenticate(@Path(value="code")
                                                                                                          int&nbsp;code)</pre>
 <div class="block">부여받은 authentication code를 이용하여 로그인을 시도함</div>
 <dl>
@@ -254,7 +254,7 @@ retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;authe
 <li class="blockList">
 <h4>checkUpdate</h4>
 <pre>@HEAD(value="apk")
-retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;checkUpdate(@Query(value="version")
+retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;&nbsp;checkUpdate(@Query(value="version")
                                                                                                 java.lang.String&nbsp;version)</pre>
 </li>
 </ul>
@@ -265,7 +265,7 @@ retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;check
 <li class="blockList">
 <h4>checkAuth</h4>
 <pre>@HEAD(value="inst/{iid}/proj/{pid}/user/{ident}")
-retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.ApiResponse&gt;&nbsp;checkAuth(@Path(value="iid")
+retrofit2.Call&lt;embedded.korea.ac.kr.emoodchart.api.response.ApiResponse&gt;&nbsp;checkAuth(@Path(value="iid")
                                                                                                                              int&nbsp;iid,
                                                                                                                              @Path(value="pid")
                                                                                                                              int&nbsp;pid,

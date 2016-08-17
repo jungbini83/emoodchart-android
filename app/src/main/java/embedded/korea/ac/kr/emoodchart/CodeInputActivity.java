@@ -9,13 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import embedded.korea.ac.kr.emoodchart.api.ApiInterface;
-import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
+import embedded.korea.ac.kr.emoodchart.api.ApiService;
+import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CodeInputActivity extends AppCompatActivity {
+public class CodeInputActivity extends AppCompatActivity implements Callback<CodeResponse> {
     EditText codeEdit;
     Button codeConfirmBtn;
     Button codeCancelBtn;
@@ -50,13 +50,18 @@ public class CodeInputActivity extends AppCompatActivity {
         final Context ctx = this.getBaseContext();
         final SharedPreferences pfSetting	= getSharedPreferences("setting", MODE_PRIVATE);
 
-        ApiInterface api = new ApiInterface();
+        ApiService api = new ApiService();
 
-        api.authenticate(code).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+        api.authenticate(code).enqueue(this);
+    }
 
-                Log.v("teemo",response.body().toString() );
+    @Override
+    public void onResponse(Call<CodeResponse> call, Response<CodeResponse> response) {
+        switch(response.code()) {
+            case 200: Log.v("teemo",response.body().toString() ); break;
+            default: return;
+        }
+
                 /*
                 pfSetting.edit().putInt("userId", userId).apply();
                 pfSetting.edit().putInt("projectId", prjId).apply();
@@ -64,15 +69,13 @@ public class CodeInputActivity extends AppCompatActivity {
                 pfSetting.edit().putString("hash", hash).apply();*/
 
 
-                Intent intent = new Intent(ctx , StatusActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        Intent intent = new Intent(this , StatusActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                //Fail
-            }
-        });
+    @Override
+    public void onFailure(Call<CodeResponse> call, Throwable t) {
+        //Fail
     }
 }

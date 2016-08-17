@@ -11,22 +11,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import embedded.korea.ac.kr.emoodchart.api.ApiInterface;
-import embedded.korea.ac.kr.emoodchart.api.ApiResponse;
+import embedded.korea.ac.kr.emoodchart.api.ApiService;
+import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
 public class StatusActivity extends Activity {
-    private ApiInterface mApi;
+    private ApiService mApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.status);
 
-        mApi = new ApiInterface();
+        mApi = new ApiService();
 
         // 조명 사용 가능 여부 확인
         SensorManager sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -53,7 +53,7 @@ public class StatusActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-                Uri uri = Uri.parse(ApiInterface.genSurveyUrl(new UserInfo(getBaseContext())));
+                Uri uri = Uri.parse(ApiService.genSurveyUrl(new UserInfo(getBaseContext())));
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(browserIntent);
 			}
@@ -79,7 +79,7 @@ public class StatusActivity extends Activity {
 //                            //업데이트 진행
 //
 //                            Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
-//                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiInterface.genApkUrl()));
+//                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.genApkUrl()));
 //                            startActivity(browserIntent);
 //                        }
 //                        else

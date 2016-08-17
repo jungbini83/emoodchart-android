@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import embedded.korea.ac.kr.emoodchart.api.*;
+import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,7 +19,7 @@ import retrofit2.Response;
  * - 관리자 화면에서 특정 환자의 요청을 수락하면 이를 결합하도록 함
  */
 public class MainActivity extends Activity {
-    private ApiInterface api = new ApiInterface();
+    private ApiService api = new ApiService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
