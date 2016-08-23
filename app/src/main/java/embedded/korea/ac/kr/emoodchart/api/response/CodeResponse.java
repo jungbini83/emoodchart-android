@@ -6,7 +6,25 @@ import com.google.gson.JsonObject;
  * Created by Skais on 2016-08-17.
  */
 public class CodeResponse extends ApiResponse<JsonObject> {
-    private String code;
+    private int inst_id;
+    private int proj_id;
+    private String hash;
+    private int identifier;
 
-    public String getCode() { return code; }
+
+    public int getInst_id() {
+        return inst_id;
+    }
+
+    public int getProj_id() {
+        return proj_id;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public int getIdentifier() {
+        return identifier;
+    }
 }

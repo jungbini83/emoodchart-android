@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import embedded.korea.ac.kr.emoodchart.api.*;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,6 +23,7 @@ import retrofit2.Response;
  */
 public class MainActivity extends Activity {
     private ApiService api = new ApiService();
+    String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +64,7 @@ public class MainActivity extends Activity {
         fitbitLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.naver.com"));
-                startActivity(browserIntent);
-                openCodeInputActivity();
-
+            fitbitLoginRequest();
             }
         });
 
@@ -84,6 +85,30 @@ public class MainActivity extends Activity {
     private void openCodeInputActivity()
     {
         Intent intent = new Intent(this, CodeInputActivity.class);
+        if(code.length()>0)
+            intent.putExtra("code",code);
         startActivity(intent);
+    }
+    private void fitbitLoginRequest()
+    {
+        api.loginWithFitbit().enqueue(new Callback<ApiResponse<FitbitResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<FitbitResponse>> call, Response<ApiResponse<FitbitResponse>> response) {
+                switch(response.code()) {
+                    case 200: Log.v("teemo",response.body().toString() ); break;
+                    default: return;
+                }
+
+                code = response.body().getResult().getCode();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(response.body().getResult().getUrl()));
+                startActivity(browserIntent);
+                openCodeInputActivity();
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<FitbitResponse>> call, Throwable t) {
+
+            }
+        });
     }
 }

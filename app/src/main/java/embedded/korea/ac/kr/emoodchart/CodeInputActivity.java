@@ -10,15 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import embedded.korea.ac.kr.emoodchart.api.ApiService;
+import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CodeInputActivity extends AppCompatActivity implements Callback<CodeResponse> {
+public class CodeInputActivity extends AppCompatActivity implements Callback<ApiResponse<CodeResponse>> {
     EditText codeEdit;
     Button codeConfirmBtn;
     Button codeCancelBtn;
+    SharedPreferences pfSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,13 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Cod
         codeEdit        = (EditText)    findViewById(R.id.code_edit);
         codeConfirmBtn  = (Button)      findViewById(R.id.code_confirm);
         codeCancelBtn   = (Button)      findViewById(R.id.code_cancel);
+
+        pfSetting = getSharedPreferences("setting", MODE_PRIVATE);
+
+        if(this.getIntent().getStringExtra("code").length()>0)
+        {
+            codeEdit.setText(this.getIntent().getStringExtra("code"));
+        }
 
         codeConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,17 +65,17 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Cod
     }
 
     @Override
-    public void onResponse(Call<CodeResponse> call, Response<CodeResponse> response) {
+    public void onResponse(Call<ApiResponse<CodeResponse>> call, Response<ApiResponse<CodeResponse>> response) {
         switch(response.code()) {
             case 200: Log.v("teemo",response.body().toString() ); break;
             default: return;
         }
 
-                /*
-                pfSetting.edit().putInt("userId", userId).apply();
-                pfSetting.edit().putInt("projectId", prjId).apply();
-                pfSetting.edit().putInt("instId", instId).apply();
-                pfSetting.edit().putString("hash", hash).apply();*/
+
+        pfSetting.edit().putInt("userId",  response.body().getResult().getIdentifier() ).apply();
+        pfSetting.edit().putInt("projectId", response.body().getResult().getProj_id() ).apply();
+        pfSetting.edit().putInt("instId", response.body().getResult().getInst_id() ).apply();
+        pfSetting.edit().putString("hash", response.body().getResult().getHash() ).apply();
 
 
         Intent intent = new Intent(this , StatusActivity.class);
@@ -75,7 +84,7 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Cod
     }
 
     @Override
-    public void onFailure(Call<CodeResponse> call, Throwable t) {
+    public void onFailure(Call<ApiResponse<CodeResponse>> call, Throwable t) {
         //Fail
     }
 }

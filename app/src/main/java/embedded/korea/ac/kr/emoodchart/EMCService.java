@@ -24,10 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class EMCService extends Service implements SensorEventListener {
     private BroadcastReceiver mLightRecv;
@@ -196,10 +193,18 @@ public class EMCService extends Service implements SensorEventListener {
     private class Uploader implements Callback<ApiResponse> {
         private long mKey;
         private float mValue;
+        private int mUTCOffset;
+
 
         Uploader(float mValue) {
             this.mKey = new Date().getTime();
             this.mValue = mValue;
+
+            Calendar cal = Calendar.getInstance();
+            TimeZone tz = cal.getTimeZone();
+            Date now = new Date();
+
+            mUTCOffset = tz.getOffset(now.getTime())/1000;
         }
 
         void start(UserInfo user) {

@@ -3,6 +3,7 @@ package embedded.korea.ac.kr.emoodchart.api;
 import embedded.korea.ac.kr.emoodchart.UserInfo;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -39,11 +40,15 @@ public class ApiService {
         return service.uploadLight(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash(), body);
     }
 
+    public Call<ApiResponse<FitbitResponse>> loginWithFitbit() {
+        return service.loginWithFitbit();
+    }
+
     public Call<ApiResponse> checkApkUpdate() {
         return service.checkUpdate("3.0");
     }
 
-    public Call<CodeResponse> authenticate(int code) {
+    public Call<ApiResponse<CodeResponse>> authenticate(int code) {
         return service.authenticate(code);
     }
 

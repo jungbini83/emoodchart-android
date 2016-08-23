@@ -2,6 +2,7 @@ package embedded.korea.ac.kr.emoodchart.api;
 
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -37,7 +38,7 @@ public interface ApiDefinition {
      * @see ApiResponse
      */
     @POST("auth/fitbit")
-    Call<ApiResponse> loginWithFitbit();
+    Call<ApiResponse<FitbitResponse>> loginWithFitbit();
 
     /**
      * 부여받은 authentication code를 이용하여 로그인을 시도함
@@ -49,7 +50,7 @@ public interface ApiDefinition {
      */
     @GET("auth/{code}")
     @Headers("x-access-by: application")
-    Call<CodeResponse> authenticate(@Path("code") int code);
+    Call<ApiResponse<CodeResponse>> authenticate(@Path("code") int code);
 
 
     @HEAD("apk")
