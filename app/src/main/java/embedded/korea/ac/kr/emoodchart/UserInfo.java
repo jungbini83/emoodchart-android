@@ -22,15 +22,15 @@ public class UserInfo {
     UserInfo(Context ctx) {
         SharedPreferences pf = ctx.getSharedPreferences("user", Context.MODE_PRIVATE);
 
-        this.userId = pf.getInt("uid", 0);
-        this.instId = pf.getInt("iid",0);
-        this.projId = pf.getInt("pid",0);
+        this.userId = pf.getInt("userId", 0);
+        this.instId = pf.getInt("instId",0);
+        this.projId = pf.getInt("projectId",0);
         this.hash = pf.getString("hash", "");
     }
 
     static void set(Context ctx, int iid, int pid, int uid, String hash) {
         SharedPreferences pf = ctx.getSharedPreferences("user", Context.MODE_PRIVATE);
-        pf.edit().putInt("uid", uid).putInt("iid", iid).putInt("pid", pid).putString("hash", hash).apply();
+        pf.edit().putInt("userId", uid).putInt("instId", iid).putInt("projectId", pid).putString("hash", hash).apply();
     }
 
     boolean isValid() {

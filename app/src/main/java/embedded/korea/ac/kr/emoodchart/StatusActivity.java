@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -22,6 +23,9 @@ public class StatusActivity extends Activity {
     private ApiService mApi;
 
     @Override
+    public void onBackPressed() {}
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.status);
@@ -34,9 +38,9 @@ public class StatusActivity extends Activity {
 
         TextView availLight = (TextView)findViewById(R.id.avail_light);
         if(light_available){
-            availLight.setText("불가능");
-        } else {
             availLight.setText("가능");
+        } else {
+            availLight.setText("불가능");
         }
 
         // 재부팅 시 자동 실행 가능 여부 확인
@@ -53,6 +57,7 @@ public class StatusActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+			    Log.v("teemo",ApiService.genSurveyUrl(new UserInfo(getBaseContext())));
                 Uri uri = Uri.parse(ApiService.genSurveyUrl(new UserInfo(getBaseContext())));
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(browserIntent);

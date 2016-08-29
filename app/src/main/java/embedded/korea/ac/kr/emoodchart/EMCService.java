@@ -17,6 +17,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import embedded.korea.ac.kr.emoodchart.api.ApiService;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import retrofit2.Call;
@@ -216,6 +217,7 @@ public class EMCService extends Service implements SensorEventListener {
         @Override
         public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
             // 성공했을 경우에는 데이터베이스에 존재했던 데이터들은 삭제하고 마무리한다
+            Log.v("teemo","send light success");
             SQLiteDatabase open = mDB.getWritableDatabase();
 
             open.beginTransaction();
@@ -229,7 +231,7 @@ public class EMCService extends Service implements SensorEventListener {
         public void onFailure(Call<ApiResponse> call, Throwable t) {
             // 업로드가 실패했을 경우에는 기존에 저장되어 있던 데이터는 원래대로 복구하고
             // 새로 수집했던 데이터를 데이터베이스에 추가한다
-
+            Log.v("teemo","send light fail");
             ContentValues trying = new ContentValues();
             ContentValues newValue = new ContentValues();
 
@@ -284,7 +286,7 @@ public class EMCService extends Service implements SensorEventListener {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table " + TABLE_NAME + " (mValue real, date integer, trying integer);");
+            db.execSQL("create table " + TABLE_NAME + " (value real, date integer, trying integer);");
         }
 
         @Override

@@ -25,14 +25,15 @@ public class ApiService {
 
         this.service = new Retrofit.Builder()
                 //.baseUrl("http://52.68.83.209/api/")
-                .baseUrl("http://10.16.16.125:4000/api/v2/")
+                //.baseUrl("http://10.16.16.125:4000/api/v2/")
+                .baseUrl("http://192.168.137.1:4000/api/v2/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiDefinition.class);
     }
 
-    public Call<ApiResponse> checkAuth(UserInfo info) {
+    public Call<Void> checkAuth(UserInfo info) {
         return service.checkAuth(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash());
     }
 
@@ -53,7 +54,7 @@ public class ApiService {
     }
 
     public static String genSurveyUrl(UserInfo user) {
-        return null;
+        return "http://192.168.137.1/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
     }
     public static String genApkUrl() { return null; }
     public Call<ApiResponse> getInsts() { return service.getInsts(); }

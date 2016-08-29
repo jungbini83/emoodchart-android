@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import embedded.korea.ac.kr.emoodchart.api.*;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
@@ -23,7 +24,7 @@ import retrofit2.Response;
  */
 public class MainActivity extends Activity {
     private ApiService api = new ApiService();
-    String code;
+    String code = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +33,21 @@ public class MainActivity extends Activity {
         UserInfo info = new UserInfo(this);
 
         if (info.isValid()) {
-			api.checkAuth(info).enqueue(new Callback<ApiResponse>() {
+			api.checkAuth(info).enqueue(new Callback<Void>() {
 				@Override
-				public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+				public void onResponse(Call<Void> call, Response<Void> response) {
                     //TODO: 성공여부 확인 후 다음 창으로 넘어감
                     // 실패일 경우에는 failure 상태일 때의 행동으로 넘어감
                     onAuthorized();
 				}
 
 				@Override
-				public void onFailure(Call<ApiResponse> call, Throwable t) {
+				public void onFailure(Call<Void> call, Throwable t) {
                     //TODO: 기존 방법으로 로그인 실패, 어떤 방식으로 로그인 할 것인가 정하도록 함
                     // 1. 관리자가 발급한 issue ID를 통한 로그인
                     // 2. fitbit 계정을 통한 로그인
                     setLoginLayout();
+                    Toast.makeText(MainActivity.this.getBaseContext()  ,"서버 연결에 실패하였습니다.",Toast.LENGTH_LONG).show();
 				}
 			});
         } else {
@@ -107,7 +109,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onFailure(Call<ApiResponse<FitbitResponse>> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this.getBaseContext()  ,"서버 연결에 실패하였습니다.",Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -70,7 +70,7 @@ public interface ApiDefinition {
      * @see ApiResponse
      */
     @HEAD("inst/{iid}/proj/{pid}/user/{ident}")
-    Call<ApiResponse> checkAuth(@Path("iid") int iid, @Path("pid") int pid, @Path("ident") int ident, @Query("hash") String hash);
+    Call<Void> checkAuth(@Path("iid") int iid, @Path("pid") int pid, @Path("ident") int ident, @Query("hash") String hash);
 
     @GET("insts")
     Call<ApiResponse> getInsts();
