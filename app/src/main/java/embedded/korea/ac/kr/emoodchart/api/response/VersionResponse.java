@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 /**
  * Created by T22mo on 2016-08-30.
  */
-public class VersionResponse extends ApiResponse<JsonObject> {
+public class VersionResponse {
     private String version;
 
     public String getVersion() {

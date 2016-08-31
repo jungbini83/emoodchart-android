@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 /**
  * Created by T22mo on 2016-08-17.
  */
-public class FitbitResponse extends ApiResponse<JsonObject> {
+public class FitbitResponse {
     private String code;
     private String url;
 

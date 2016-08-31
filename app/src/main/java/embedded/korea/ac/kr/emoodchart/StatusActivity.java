@@ -71,16 +71,17 @@ public class StatusActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                mApi.checkApkUpdate().enqueue(new Callback<VersionResponse>() {
+                mApi.checkApkUpdate().enqueue(new Callback<ApiResponse<VersionResponse>>() {
                     @Override
-                    public void onResponse(Call<VersionResponse> call, Response<VersionResponse> response) {
+                    public void onResponse(Call<ApiResponse<VersionResponse>> call, Response<ApiResponse<VersionResponse>> response) {
                         //Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
 
                         int errCode = response.code();
                         if(errCode == 200)
                         {
                             //업데이트 진행
-                            String version = response.body().getVersion();
+                            Log.v("data", response.body().toString());
+                            String version = response.body().getResult().getVersion();
 
                             if(version.equals("5.0.0"))
                             {
@@ -90,7 +91,7 @@ public class StatusActivity extends Activity {
                             {
 
                                 Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.genApkUrl()));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.URL_APK));
                                 startActivity(browserIntent);
                             }
                         }
@@ -99,7 +100,7 @@ public class StatusActivity extends Activity {
                     }
 
                     @Override
-                    public void onFailure(Call<VersionResponse> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<VersionResponse>> call, Throwable t) {
 //
                     }
                 });

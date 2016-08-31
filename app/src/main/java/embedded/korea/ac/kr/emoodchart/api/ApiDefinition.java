@@ -53,10 +53,6 @@ public interface ApiDefinition {
     @Headers("x-access-by: application")
     Call<ApiResponse<CodeResponse>> authenticate(@Path("code") int code);
 
-
-    @HEAD("apk")
-    Call<VersionResponse> checkUpdate(@Query("version") String version);
-
     /**
      * 주어진 정보가 유효하고 실제로 존재하는 인증 정보인지 확인
      * 500 - 서버 자체 에러<br>
@@ -73,6 +69,6 @@ public interface ApiDefinition {
     @HEAD("inst/{iid}/proj/{pid}/user/{ident}")
     Call<Void> checkAuth(@Path("iid") int iid, @Path("pid") int pid, @Path("ident") int ident, @Query("hash") String hash);
 
-    @GET("insts")
-    Call<ApiResponse> getInsts();
+    @GET("apk/version")
+    Call<ApiResponse<VersionResponse>> checkUpdate();
 }

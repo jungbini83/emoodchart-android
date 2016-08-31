@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 /**
  * Created by Skais on 2016-08-17.
  */
-public class CodeResponse extends ApiResponse<JsonObject> {
+public class CodeResponse {
     private int inst_id;
     private int proj_id;
     private String hash;

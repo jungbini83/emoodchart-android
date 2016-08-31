@@ -18,6 +18,10 @@ import java.util.Map;
  */
 public class ApiService {
     public ApiDefinition service;
+    //private static final String BASE_URL = "http://52.78.135.214:4000";
+    private static final String URL_BASE = "http://192.168.137.1";
+    private static final String URL_API = URL_BASE + ":4000/api/v2/";
+    public static final String URL_APK = URL_BASE + "/apk";
 
     public ApiService() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -25,10 +29,7 @@ public class ApiService {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         this.service = new Retrofit.Builder()
-                //.baseUrl("http://52.68.83.209/api/")
-                //.baseUrl("http://10.16.16.125:4000/api/v2/")
-                //.baseUrl("http://192.168.137.1:4000/api/v2/")
-                .baseUrl("http://52.78.135.214:4000/api/v2/")
+                .baseUrl(ApiService.URL_API)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -47,8 +48,8 @@ public class ApiService {
         return service.loginWithFitbit();
     }
 
-    public Call<VersionResponse> checkApkUpdate() {
-        return service.checkUpdate("5.0.0");
+    public Call<ApiResponse<VersionResponse>> checkApkUpdate() {
+        return service.checkUpdate();
     }
 
     public Call<ApiResponse<CodeResponse>> authenticate(int code) {
@@ -56,8 +57,6 @@ public class ApiService {
     }
 
     public static String genSurveyUrl(UserInfo user) {
-        return "http://52.78.135.214/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
+        return URL_BASE + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
     }
-    public static String genApkUrl() { return null; }
-    public Call<ApiResponse> getInsts() { return service.getInsts(); }
 }
