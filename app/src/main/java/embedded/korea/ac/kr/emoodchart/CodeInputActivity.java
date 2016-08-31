@@ -38,12 +38,14 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
 
         String type = getIntent().getAction();
         if (type.equals(VIA_FITBIT)) {
-            String code = getIntent().getStringExtra("code");
-            String url = getIntent().getStringExtra("url");
-            codeEdit.setText(code);
+            if (savedInstanceState == null || savedInstanceState.getBoolean("redirected", false) == false) {
+                String url = getIntent().getStringExtra("url");
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
 
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(browserIntent);
+            String code = getIntent().getStringExtra("code");
+            codeEdit.setText(code);
         } else if (type.equals(VIA_CODE)) {
             // Do nothing. NOW.
         }
@@ -67,6 +69,12 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
     private void sendCodeToServer(int code)
     {
         api.authenticate(code).enqueue(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("redirected", true);
     }
 
     @Override
