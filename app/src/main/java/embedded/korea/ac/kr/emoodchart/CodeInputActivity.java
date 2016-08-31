@@ -3,6 +3,7 @@ package embedded.korea.ac.kr.emoodchart;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +22,10 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
     EditText codeEdit;
     Button codeConfirmBtn;
     Button codeCancelBtn;
-    SharedPreferences pfSetting;
+    ApiService api = new ApiService();
+
+    static final String VIA_FITBIT = "action.fitbit";
+    static final String VIA_CODE = "action.code";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +36,16 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
         codeConfirmBtn  = (Button)      findViewById(R.id.code_confirm);
         codeCancelBtn   = (Button)      findViewById(R.id.code_cancel);
 
-        pfSetting = getSharedPreferences("user", MODE_PRIVATE);
+        String type = getIntent().getAction();
+        if (type.equals(VIA_FITBIT)) {
+            String code = getIntent().getStringExtra("code");
+            String url = getIntent().getStringExtra("url");
+            codeEdit.setText(code);
 
-        if(this.getIntent().getStringExtra("code") !=  null)
-        {
-            codeEdit.setText(this.getIntent().getStringExtra("code"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        } else if (type.equals(VIA_CODE)) {
+            // Do nothing. NOW.
         }
 
         codeConfirmBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +66,6 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
     }
     private void sendCodeToServer(int code)
     {
-        final Context ctx = this.getBaseContext();
-        final SharedPreferences pfSetting	= getSharedPreferences("setting", MODE_PRIVATE);
-
-        ApiService api = new ApiService();
-
         api.authenticate(code).enqueue(this);
     }
 
@@ -72,17 +76,20 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
             default: return;
         }
 
-        Log.v("teemo", ""+response.body().getResult().getIdentifier() );
-        Log.v("teemo", ""+response.body().getResult().getProj_id() );
-        Log.v("teemo", ""+response.body().getResult().getInst_id() );
-        Log.v("teemo", ""+response.body().getResult().getHash() );
 
-        pfSetting.edit().putInt("userId",  response.body().getResult().getIdentifier() ).apply();
-        pfSetting.edit().putInt("projectId", response.body().getResult().getProj_id() ).apply();
-        pfSetting.edit().putInt("instId", response.body().getResult().getInst_id() ).apply();
-        pfSetting.edit().putString("hash", response.body().getResult().getHash() ).apply();
+        int userId = response.body().getResult().getIdentifier();
+        int projId = response.body().getResult().getProj_id();
+        int instId = response.body().getResult().getInst_id();
+        String hash = response.body().getResult().getHash();
+        Log.v("teemo", Integer.toString(userId) );
+        Log.v("teemo", Integer.toString(projId) );
+        Log.v("teemo", Integer.toString(instId) );
+        Log.v("teemo", hash );
+
+        UserInfo.set(this, instId, projId, userId, hash);
 
         Intent intent = new Intent(this , StatusActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

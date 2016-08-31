@@ -24,7 +24,6 @@ import retrofit2.Response;
  */
 public class MainActivity extends Activity {
     private ApiService api = new ApiService();
-    String code = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +35,11 @@ public class MainActivity extends Activity {
 			api.checkAuth(info).enqueue(new Callback<Void>() {
 				@Override
 				public void onResponse(Call<Void> call, Response<Void> response) {
-                    //TODO: 성공여부 확인 후 다음 창으로 넘어감
-                    // 실패일 경우에는 failure 상태일 때의 행동으로 넘어감
                     onAuthorized();
 				}
 
 				@Override
 				public void onFailure(Call<Void> call, Throwable t) {
-                    //TODO: 기존 방법으로 로그인 실패, 어떤 방식으로 로그인 할 것인가 정하도록 함
                     // 1. 관리자가 발급한 issue ID를 통한 로그인
                     // 2. fitbit 계정을 통한 로그인
                     setLoginLayout();
@@ -73,22 +69,22 @@ public class MainActivity extends Activity {
         coordLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openCodeInputActivity();
+                openCodeInputActivity(CodeInputActivity.VIA_CODE, null, null);
             }
         });
-
-        //TODO: 버튼 이벤트 연동
     }
     private void onAuthorized() {
         Intent intent = new Intent(this, StatusActivity.class);
         startActivity(intent);
         finish();
     }
-    private void openCodeInputActivity()
+
+    private void openCodeInputActivity(String type, String code, String url)
     {
         Intent intent = new Intent(this, CodeInputActivity.class);
-        if(code.length()>0)
-            intent.putExtra("code",code);
+        intent.putExtra("url", url);
+        intent.putExtra("code", code);
+        intent.setAction(type);
         startActivity(intent);
     }
     private void fitbitLoginRequest()
@@ -101,10 +97,9 @@ public class MainActivity extends Activity {
                     default: return;
                 }
 
-                code = response.body().getResult().getCode();
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(response.body().getResult().getUrl()));
-                startActivity(browserIntent);
-                openCodeInputActivity();
+                String code = response.body().getResult().getCode();
+                String url = response.body().getResult().getUrl();
+                openCodeInputActivity(CodeInputActivity.VIA_FITBIT, code, url);
             }
 
             @Override
