@@ -3,6 +3,7 @@ package embedded.korea.ac.kr.emoodchart.api;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -54,7 +55,7 @@ public interface ApiDefinition {
 
 
     @HEAD("apk")
-    Call<ApiResponse> checkUpdate(@Query("version") String version);
+    Call<VersionResponse> checkUpdate(@Query("version") String version);
 
     /**
      * 주어진 정보가 유효하고 실제로 존재하는 인증 정보인지 확인

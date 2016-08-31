@@ -24,7 +24,7 @@
                   android:layout_height="wrap_content" android:layout_margin="10dp">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="fitbit을 사용하고 있지 않다면..." android:id="@+id/textView4" android:gravity="center"/>
-        <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/btnLoginWithCoord" android:text="특수번호로 로그인" />
+        <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/btnLoginWithCoord" android:text="임시번호로 로그인" />
     </LinearLayout>
 
 </LinearLayout>

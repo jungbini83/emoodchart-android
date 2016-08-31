@@ -205,7 +205,7 @@ public class EMCService extends Service implements SensorEventListener {
             TimeZone tz = cal.getTimeZone();
             Date now = new Date();
 
-            mUTCOffset = tz.getOffset(now.getTime())/1000;
+            this.mUTCOffset = tz.getOffset(now.getTime())/1000;
         }
 
         void start(UserInfo user) {
@@ -240,6 +240,7 @@ public class EMCService extends Service implements SensorEventListener {
             newValue.put("trying", 0);
             newValue.put("value", mValue);
             newValue.put("date", mKey);
+            newValue.put("utcoffset",mUTCOffset);
 
             SQLiteDatabase open = mDB.getWritableDatabase();
 
@@ -286,7 +287,7 @@ public class EMCService extends Service implements SensorEventListener {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table " + TABLE_NAME + " (value real, date integer, trying integer);");
+            db.execSQL("create table " + TABLE_NAME + " (value real, date integer, utcoffset integer, trying integer);");
         }
 
         @Override

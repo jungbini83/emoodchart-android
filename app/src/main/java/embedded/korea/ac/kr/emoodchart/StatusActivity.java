@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import embedded.korea.ac.kr.emoodchart.api.ApiService;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,25 +71,36 @@ public class StatusActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                mApi.checkApkUpdate().enqueue(new Callback<ApiResponse>() {
+                mApi.checkApkUpdate().enqueue(new Callback<VersionResponse>() {
                     @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
+                    public void onResponse(Call<VersionResponse> call, Response<VersionResponse> response) {
+                        //Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
+
+                        int errCode = response.code();
+                        if(errCode == 200)
+                        {
+                            //업데이트 진행
+                            String version = response.body().getVersion();
+
+                            if(version.equals("5.0.0"))
+                            {
+                                Toast.makeText(getBaseContext(), "최신 버전입니다.",Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+
+                                Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.genApkUrl()));
+                                startActivity(browserIntent);
+                            }
+                        }
+                        else
+                            Toast.makeText(getBaseContext(), "확인에 실패하였습니다.",Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-//                        int errCode = t.networkResponse.statusCode;
-//                        if(errCode == 302)
-//                        {
-//                            //업데이트 진행
+                    public void onFailure(Call<VersionResponse> call, Throwable t) {
 //
-//                            Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
-//                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.genApkUrl()));
-//                            startActivity(browserIntent);
-//                        }
-//                        else
-//                            Toast.makeText(getBaseContext(), "확인에 실패하였습니다.",Toast.LENGTH_LONG).show();
                     }
                 });
 			}

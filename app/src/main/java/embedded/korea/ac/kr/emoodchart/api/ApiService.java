@@ -4,6 +4,7 @@ import embedded.korea.ac.kr.emoodchart.UserInfo;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -26,7 +27,8 @@ public class ApiService {
         this.service = new Retrofit.Builder()
                 //.baseUrl("http://52.68.83.209/api/")
                 //.baseUrl("http://10.16.16.125:4000/api/v2/")
-                .baseUrl("http://192.168.137.1:4000/api/v2/")
+                //.baseUrl("http://192.168.137.1:4000/api/v2/")
+                .baseUrl("http://52.78.135.214:4000/api/v2/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -45,8 +47,8 @@ public class ApiService {
         return service.loginWithFitbit();
     }
 
-    public Call<ApiResponse> checkApkUpdate() {
-        return service.checkUpdate("3.0");
+    public Call<VersionResponse> checkApkUpdate() {
+        return service.checkUpdate("5.0.0");
     }
 
     public Call<ApiResponse<CodeResponse>> authenticate(int code) {
@@ -54,7 +56,7 @@ public class ApiService {
     }
 
     public static String genSurveyUrl(UserInfo user) {
-        return "http://192.168.137.1/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
+        return "http://52.78.135.214/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
     }
     public static String genApkUrl() { return null; }
     public Call<ApiResponse> getInsts() { return service.getInsts(); }
