@@ -45,7 +45,7 @@ public class EMCService extends Service implements SensorEventListener {
 
     private final static int DB_VERSION = 6;
     private final static String TABLE_NAME = "lightbackup";
-    private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private final static String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -192,25 +192,21 @@ public class EMCService extends Service implements SensorEventListener {
      * 새로운 데이터가 추가될 때마다 새롭게 생성하며 데이터의 업로드의 성공, 실패에 따라 데이터베이스를 조작하는 역할을 수행함
      */
     private class Uploader implements Callback<ApiResponse> {
-        private long mKey;
+        private Date mKey;
         private float mValue;
-        private int mUTCOffset;
+        private SimpleDateFormat sdf;
 
 
         Uploader(float mValue) {
-            this.mKey = new Date().getTime();
+            this.mKey = Calendar.getInstance().getTime();
             this.mValue = mValue;
-
-            Calendar cal = Calendar.getInstance();
-            TimeZone tz = cal.getTimeZone();
-            Date now = new Date();
-
-            this.mUTCOffset = tz.getOffset(now.getTime())/1000;
+            this.sdf = new SimpleDateFormat(DATETIME_FORMAT);
+            this.sdf.setTimeZone(TimeZone.getDefault()); // 재부팅 없이도 시스템 세팅이 변함에 따라 자동으로 가져올 수 있도록
         }
 
         void start(UserInfo user) {
             Map<String,Float> data = createData();
-            data.put(sdf.format(new Date(mKey)), mValue);
+            data.put(sdf.format(mKey), mValue);
             api.uploadLight(user, data).enqueue(this);
         }
 
@@ -221,7 +217,7 @@ public class EMCService extends Service implements SensorEventListener {
             SQLiteDatabase open = mDB.getWritableDatabase();
 
             open.beginTransaction();
-            open.delete(TABLE_NAME, "trying=" + Long.toString(mKey), null);
+            open.delete(TABLE_NAME, "trying=" + mKey.getTime(), null);
             open.setTransactionSuccessful();
             open.endTransaction();
             open.close();
@@ -239,13 +235,12 @@ public class EMCService extends Service implements SensorEventListener {
 
             newValue.put("trying", 0);
             newValue.put("value", mValue);
-            newValue.put("date", mKey);
-            newValue.put("utcoffset",mUTCOffset);
+            newValue.put("date", sdf.format(mKey));
 
             SQLiteDatabase open = mDB.getWritableDatabase();
 
             open.beginTransaction();
-            open.update(TABLE_NAME, trying, "trying=" + Long.toString(mKey), null);
+            open.update(TABLE_NAME, trying, "trying=" + mKey.getTime(), null);
             open.insert(TABLE_NAME, null, newValue);
             open.setTransactionSuccessful();
             open.endTransaction();
@@ -254,7 +249,9 @@ public class EMCService extends Service implements SensorEventListener {
 
         private Map<String, Float> createData() {
             ContentValues trying = new ContentValues();
-            trying.put("trying", mKey);
+            long requestId = mKey.getTime();
+
+            trying.put("trying", requestId);
 
             SQLiteDatabase open = mDB.getWritableDatabase();
             open.beginTransaction();
@@ -262,7 +259,7 @@ public class EMCService extends Service implements SensorEventListener {
             open.update(TABLE_NAME, trying, "trying=0", null);
 
             // 업데이트가 되었던 리스트들을 하나씩 가져와서 데이터로 넣는다.
-            Cursor cur = open.query(TABLE_NAME, null, "trying=" + Long.toString(mKey), null, null, null, null);
+            Cursor cur = open.query(TABLE_NAME, null, "trying=" + Long.toString(requestId), null, null, null, null);
             Map<String, Float> tmp = new HashMap<>();
             while (cur.moveToNext()) {
                 String key = sdf.format(new Date(cur.getLong(1)));
@@ -287,7 +284,7 @@ public class EMCService extends Service implements SensorEventListener {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table " + TABLE_NAME + " (value real, date integer, utcoffset integer, trying integer);");
+            db.execSQL("create table " + TABLE_NAME + " (value real, date text, trying integer);");
         }
 
         @Override
