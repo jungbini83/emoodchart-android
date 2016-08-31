@@ -12,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -93,8 +94,13 @@ public class EMCService extends Service implements SensorEventListener {
                     NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                     nm.notify(NOTI_ID, builder.build());
 
-                    Vibrator vib = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-                    vib.vibrate(1000);
+
+                    AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                    if (am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                        Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                        vib.vibrate(1000);
+                    }
+
                 } else if (action.equals(ACT_SCREEN_ON)){
                     SensorManager sm = (SensorManager)getSystemService(SENSOR_SERVICE);
                     Sensor lightSensor = sm.getDefaultSensor(Sensor.TYPE_LIGHT);

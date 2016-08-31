@@ -18,8 +18,7 @@ import java.util.Map;
  */
 public class ApiService {
     public ApiDefinition service;
-    //private static final String BASE_URL = "http://52.78.135.214:4000";
-    private static final String URL_BASE = "http://192.168.137.1";
+    private static final String URL_BASE = "http://52.78.135.214:4000";
     private static final String URL_API = URL_BASE + ":4000/api/v2/";
     public static final String URL_APK = URL_BASE + "/apk";
 
