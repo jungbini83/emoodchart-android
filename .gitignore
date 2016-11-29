@@ -21,5 +21,6 @@
 .idea/libraries
 
 /build
+/doc
 local.properties
 .gradle
