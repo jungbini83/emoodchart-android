@@ -1,29 +1,43 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "embedded.korea.ac.kr.emoodchart"
         minSdkVersion 15
         versionCode 1
         versionName "1.0"
+        buildConfigField "String", "version", '"5.0.1"'
     }
     buildTypes {
         release {
+            buildConfigField "String", "host", '"http://52.78.135.214"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField "String", "host", '"http://163.152.161.108"'
+        }
+    }
+
+    android {
+        defaultConfig {
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    testCompile "org.mockito:mockito-core:2.+"
+    compile 'com.squareup.retrofit2:retrofit:2.1.+'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.+'
+    compile 'com.android.support:appcompat-v7:25.1.+'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.+'
+    compile 'com.squareup.okhttp3:okhttp:3.4.+'
+
 }

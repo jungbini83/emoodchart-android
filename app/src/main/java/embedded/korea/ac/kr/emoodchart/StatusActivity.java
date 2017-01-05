@@ -12,16 +12,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import embedded.korea.ac.kr.emoodchart.api.ApiService;
+import embedded.korea.ac.kr.emoodchart.api.APIHelper;
+import embedded.korea.ac.kr.emoodchart.api.ApiClient;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
+import embedded.korea.ac.kr.emoodchart.services.EMCService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
 public class StatusActivity extends Activity {
-    private ApiService mApi;
+    private ApiClient mApi;
 
     @Override
     public void onBackPressed() {}
@@ -31,7 +33,7 @@ public class StatusActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.status);
 
-        mApi = new ApiService();
+        mApi = APIHelper.createClient();
 
         // 조명 사용 가능 여부 확인
         SensorManager sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -58,8 +60,7 @@ public class StatusActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-			    Log.v("teemo",ApiService.genSurveyUrl(new UserInfo(getBaseContext())));
-                Uri uri = Uri.parse(ApiService.genSurveyUrl(new UserInfo(getBaseContext())));
+                Uri uri = Uri.parse(APIHelper.genSurveyUrl(new UserInfo(getBaseContext())));
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(browserIntent);
 			}
@@ -71,7 +72,7 @@ public class StatusActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                mApi.checkApkUpdate().enqueue(new Callback<ApiResponse<VersionResponse>>() {
+                mApi.checkUpdate().enqueue(new Callback<ApiResponse<VersionResponse>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<VersionResponse>> call, Response<ApiResponse<VersionResponse>> response) {
                         //Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
@@ -83,7 +84,7 @@ public class StatusActivity extends Activity {
                             Log.v("data", response.body().toString());
                             String version = response.body().getResult().getVersion();
 
-                            if(version.equals("5.0.0"))
+                            if(version.equals(BuildConfig.version))
                             {
                                 Toast.makeText(getBaseContext(), "최신 버전입니다.",Toast.LENGTH_LONG).show();
                             }
@@ -91,7 +92,7 @@ public class StatusActivity extends Activity {
                             {
 
                                 Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiService.URL_APK));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(APIHelper.URL_APK));
                                 startActivity(browserIntent);
                             }
                         }

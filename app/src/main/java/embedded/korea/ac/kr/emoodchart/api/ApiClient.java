@@ -1,15 +1,12 @@
 package embedded.korea.ac.kr.emoodchart.api;
 
-import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.*;
 import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.Map;
 
-public interface ApiDefinition {
+public interface ApiClient {
     /**
      * 수집된 조도 데이터를 서버로 전송한다.<br>
      * 500 - 서버 자체 에러<br>
@@ -25,7 +22,7 @@ public interface ApiDefinition {
      * @see ApiResponse
      */
     @POST("inst/{iid}/proj/{pid}/user/{ident}/light")
-    Call<ApiResponse> uploadLight(@Path("iid") int iid, @Path("pid") int pid, @Path("ident") int ident, @Query("hash") String hash, @Body Map<String, Float> body);
+    Call<ApiResponse<NotificationResponse>> uploadLight(@Path("iid") int iid, @Path("pid") int pid, @Path("ident") int ident, @Query("hash") String hash, @Body Map<String, Float> body);
 
     /**
      * Fitbit을 이용하여 로그인을 시도한다.<br>

@@ -2,7 +2,6 @@ package embedded.korea.ac.kr.emoodchart;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import embedded.korea.ac.kr.emoodchart.api.*;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +21,7 @@ import retrofit2.Response;
  * - 관리자 화면에서 특정 환자의 요청을 수락하면 이를 결합하도록 함
  */
 public class MainActivity extends Activity {
-    private ApiService api = new ApiService();
+    private ApiClient api = APIHelper.createClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +30,7 @@ public class MainActivity extends Activity {
         UserInfo info = new UserInfo(this);
 
         if (info.isValid()) {
-			api.checkAuth(info).enqueue(new Callback<Void>() {
+            APIHelper.checkAuth(api, info).enqueue(new Callback<Void>() {
 				@Override
 				public void onResponse(Call<Void> call, Response<Void> response) {
                     onAuthorized();

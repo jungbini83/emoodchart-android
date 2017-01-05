@@ -19,7 +19,7 @@ public class UserInfo {
         this.hash = hash;
     }
 
-    UserInfo(Context ctx) {
+    public UserInfo(Context ctx) {
         SharedPreferences pf = ctx.getSharedPreferences("user", Context.MODE_PRIVATE);
 
         this.userId = pf.getInt("userId", 0);
@@ -33,7 +33,7 @@ public class UserInfo {
         pf.edit().putInt("userId", uid).putInt("instId", iid).putInt("projectId", pid).putString("hash", hash).apply();
     }
 
-    boolean isValid() {
+    public boolean isValid() {
         return getUserId() != 0;
     }
     public int getUserId() {

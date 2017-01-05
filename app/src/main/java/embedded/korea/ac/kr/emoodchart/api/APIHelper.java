@@ -1,10 +1,9 @@
 package embedded.korea.ac.kr.emoodchart.api;
 
+import embedded.korea.ac.kr.emoodchart.BuildConfig;
+import embedded.korea.ac.kr.emoodchart.R;
 import embedded.korea.ac.kr.emoodchart.UserInfo;
-import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.FitbitResponse;
-import embedded.korea.ac.kr.emoodchart.api.response.VersionResponse;
+import embedded.korea.ac.kr.emoodchart.api.response.*;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -14,48 +13,39 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.util.Map;
 
 /**
- * Created by Skais on 2016-08-09.
+ * Created by skais on 1/5/17.
  */
-public class ApiService {
-    public ApiDefinition service;
-    private static final String URL_BASE = "http://52.78.135.214";
+public class APIHelper {
+    private static final String URL_BASE = BuildConfig.host;
     private static final String URL_API = URL_BASE + ":4000/api/v2/";
     public static final String URL_APK = URL_BASE + "/apk";
 
-    public ApiService() {
+    public static ApiClient createClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        this.service = new Retrofit.Builder()
-                .baseUrl(ApiService.URL_API)
+        return new Retrofit.Builder()
+                .baseUrl(URL_API)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(ApiDefinition.class);
+                .create(ApiClient.class);
     }
 
-    public Call<Void> checkAuth(UserInfo info) {
+    public static Call<Void> checkAuth(ApiClient service, UserInfo info) {
         return service.checkAuth(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash());
     }
 
-    public Call<ApiResponse> uploadLight(UserInfo info, Map<String, Float> body) {
+    public static Call<ApiResponse<NotificationResponse>> uploadLight(ApiClient service, UserInfo info, Map<String, Float> body) {
         return service.uploadLight(info.getInstId(), info.getProjId(), info.getUserId(), info.getHash(), body);
-    }
-
-    public Call<ApiResponse<FitbitResponse>> loginWithFitbit() {
-        return service.loginWithFitbit();
-    }
-
-    public Call<ApiResponse<VersionResponse>> checkApkUpdate() {
-        return service.checkUpdate();
-    }
-
-    public Call<ApiResponse<CodeResponse>> authenticate(int code) {
-        return service.authenticate(code);
     }
 
     public static String genSurveyUrl(UserInfo user) {
         return URL_BASE + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
+    }
+
+    public static String genDashbardUrl(UserInfo user) {
+        return URL_BASE + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/?hash="+user.getHash();
     }
 }

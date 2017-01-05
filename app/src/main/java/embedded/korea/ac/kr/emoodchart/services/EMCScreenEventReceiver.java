@@ -1,4 +1,4 @@
-package embedded.korea.ac.kr.emoodchart;
+package embedded.korea.ac.kr.emoodchart.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

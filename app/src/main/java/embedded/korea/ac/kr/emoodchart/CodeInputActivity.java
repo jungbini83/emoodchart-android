@@ -1,8 +1,6 @@
 package embedded.korea.ac.kr.emoodchart;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import embedded.korea.ac.kr.emoodchart.api.ApiService;
+import embedded.korea.ac.kr.emoodchart.api.APIHelper;
+import embedded.korea.ac.kr.emoodchart.api.ApiClient;
 import embedded.korea.ac.kr.emoodchart.api.response.ApiResponse;
 import embedded.korea.ac.kr.emoodchart.api.response.CodeResponse;
 import retrofit2.Call;
@@ -22,7 +21,7 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
     EditText codeEdit;
     Button codeConfirmBtn;
     Button codeCancelBtn;
-    ApiService api = new ApiService();
+    ApiClient api = APIHelper.createClient();
 
     static final String VIA_FITBIT = "action.fitbit";
     static final String VIA_CODE = "action.code";
@@ -38,7 +37,7 @@ public class CodeInputActivity extends AppCompatActivity implements Callback<Api
 
         String type = getIntent().getAction();
         if (type.equals(VIA_FITBIT)) {
-            if (savedInstanceState == null || savedInstanceState.getBoolean("redirected", false) == false) {
+            if (savedInstanceState == null || !savedInstanceState.getBoolean("redirected", false)) {
                 String url = getIntent().getStringExtra("url");
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
