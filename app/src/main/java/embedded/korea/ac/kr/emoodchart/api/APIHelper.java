@@ -16,9 +16,8 @@ import java.util.Map;
  * Created by skais on 1/5/17.
  */
 public class APIHelper {
-    private static final String URL_BASE = BuildConfig.host;
-    private static final String URL_API = URL_BASE + ":4000/api/v2/";
-    public static final String URL_APK = URL_BASE + "/apk";
+    private static final String URL_API = BuildConfig.API_URL + "/api/v2/";
+    public static final String URL_APK = BuildConfig.WEB_URL + "/apk";
 
     public static ApiClient createClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -42,10 +41,10 @@ public class APIHelper {
     }
 
     public static String genSurveyUrl(UserInfo user) {
-        return URL_BASE + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
+        return BuildConfig.WEB_URL + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/survey?hash="+user.getHash();
     }
 
     public static String genDashbardUrl(UserInfo user) {
-        return URL_BASE + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/?hash="+user.getHash();
+        return BuildConfig.WEB_URL + "/inst/"+user.getInstId()+"/proj/"+user.getProjId()+"/user/"+user.getUserId()+"/?hash="+user.getHash();
     }
 }

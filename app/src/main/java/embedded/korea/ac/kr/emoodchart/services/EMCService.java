@@ -51,19 +51,7 @@ public class EMCService extends Service implements SensorEventListener {
                     case ACT_QUICKBOOT_POWERON:
                     case ACT_BOOT_COMPLETE:
                     {
-                        /*
-                         * 재부팅 시 RestartReceiver를 통해 서비스가 시작될 경우 작동하는 루틴
-                         * 처음 테스트 과정에서는 앱을 실행시켜 코디네이터가 확인할 수 있도록 처리
-                         * 그 이외의 경우에는 아무것도 수행하지 않음
-                         */
-                        SharedPreferences pf = getSharedPreferences("appstatus", MODE_PRIVATE);
-                        if (pf.getBoolean("rebootable", false)) {
-                            pf.edit().putBoolean("rebootable", true).apply();
-
-                            Intent chk = new Intent(this, MainActivity.class);
-                            chk.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(chk);
-                        }
+                        //서비스를 강제로 시작하는 이벤트이기 때문에 따로 수행할 작업은 없음
                         break;
                     }
                     case ACT_ALARM:

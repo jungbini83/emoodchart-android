@@ -1,43 +1,68 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        ESEL {
+            keyAlias 'depapp'
+            keyPassword 't22mocnd'
+            storeFile file('/extra/Download/depapp_key.jks')
+            storePassword 't22mocnd'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
     defaultConfig {
         applicationId "embedded.korea.ac.kr.emoodchart"
         minSdkVersion 15
         versionCode 1
         versionName "1.0"
         buildConfigField "String", "version", '"5.0.1"'
+        signingConfig signingConfigs.ESEL
     }
     buildTypes {
         release {
-            buildConfigField "String", "host", '"http://52.78.135.214"'
+            buildConfigField "String", "API_URL", '"http://www.emoodchart.net:8000"'
+            buildConfigField "String", "WEB_URL", '"http://www.emoodchart.net"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
+        alpharelease {
+            initWith release
+            buildConfigField "String", "API_URL", '"http://www.emoodchart.net:7777"'
+            buildConfigField "String", "WEB_URL", '"http://www.emoodchart.net:7778"'
+        }
+
+        emulator {
+            initWith debug
+            buildConfigField "String", "API_URL", '"http://10.0.2.2:8080"'
+            buildConfigField "String", "WEB_URL", '"http://10.0.2.2:8080"'
+        }
+
         debug {
-            buildConfigField "String", "host", '"http://163.152.161.108"'
+            buildConfigField "String", "API_URL", '"http://localhost:8080"'
+            buildConfigField "String", "WEB_URL", '"http://localhost:8080"'
         }
     }
-
     android {
         defaultConfig {
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
+    }
+    productFlavors {
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.+"
+    testCompile 'org.mockito:mockito-core:2.+'
     compile 'com.squareup.retrofit2:retrofit:2.1.+'
     compile 'com.squareup.retrofit2:converter-gson:2.1.+'
     compile 'com.android.support:appcompat-v7:25.1.+'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.+'
     compile 'com.squareup.okhttp3:okhttp:3.4.+'
-
+    androidTestCompile 'com.android.support:support-annotations:25.1.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
 }

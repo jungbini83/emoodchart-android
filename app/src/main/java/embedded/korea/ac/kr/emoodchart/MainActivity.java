@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
             APIHelper.checkAuth(api, info).enqueue(new Callback<Void>() {
 				@Override
 				public void onResponse(Call<Void> call, Response<Void> response) {
-                    onAuthorized();
+				    if (response.code() != 200) setLoginLayout();
+                    else onAuthorized();
 				}
 
 				@Override
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
                     // 1. 관리자가 발급한 issue ID를 통한 로그인
                     // 2. fitbit 계정을 통한 로그인
                     setLoginLayout();
-                    Toast.makeText(MainActivity.this.getBaseContext()  ,"서버 연결에 실패하였습니다.",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this.getBaseContext()  ,"서버 연결에 실패하였습니다.",Toast.LENGTH_LONG).show();
 				}
 			});
         } else {

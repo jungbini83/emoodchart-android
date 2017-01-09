@@ -26,12 +26,12 @@ public class ServerRequestTest {
     private ApiClient userClient;
 
     public ServerRequestTest() {
-        userClient = createAPI(ApiClient.class, "api/v2/");
-        adminClient = createAPI(AdminApiClient.class, "api/v2/admin/");
+        userClient = createAPI(ApiClient.class, "/api/v2/");
+        adminClient = createAPI(AdminApiClient.class, "/api/v2/admin/");
     }
 
     private static <T> T createAPI(Class<T> className, String path) {
-        final String URL_API = "http://localhost:4000/" + path;
+        final String URL_API = BuildConfig.API_URL + path;
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(new CookieJar() {

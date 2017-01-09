@@ -2,7 +2,6 @@ package embedded.korea.ac.kr.emoodchart.light;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import embedded.korea.ac.kr.emoodchart.UserInfo;
 import embedded.korea.ac.kr.emoodchart.api.APIHelper;
 import embedded.korea.ac.kr.emoodchart.api.ApiClient;
@@ -40,7 +39,7 @@ public class LightUploader implements Callback<ApiResponse<NotificationResponse>
     }
 
     public void start(UserInfo user) {
-        Map<String,Float> data = mDB.getData(sdf, mKey);
+        Map<String,Float> data = mDB.getData(mKey);
         data.put(sdf.format(mKey), mValue);
         APIHelper.uploadLight(api, user, data).enqueue(this);
     }
@@ -48,7 +47,6 @@ public class LightUploader implements Callback<ApiResponse<NotificationResponse>
     @Override
     public void onResponse(Call<ApiResponse<NotificationResponse>> call, Response<ApiResponse<NotificationResponse>> response) {
         // 성공했을 경우에는 데이터베이스에 존재했던 데이터들은 삭제하고 마무리한다
-        Log.d("ASDF","ASDF");
         mDB.clearUploadedData(mKey);
         mDB.close();
 
@@ -60,11 +58,8 @@ public class LightUploader implements Callback<ApiResponse<NotificationResponse>
         }
     }
 
-
-
     @Override
     public void onFailure(Call<ApiResponse<NotificationResponse>> call, Throwable t) {
-        Log.d("ASDF","ASDFFFF");
         mDB.storeUploadFailed(sdf, mKey, mValue);
         mDB.close();
     }

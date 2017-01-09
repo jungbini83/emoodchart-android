@@ -17,7 +17,7 @@ import java.util.Map;
  */
 class LightDBHelper extends SQLiteOpenHelper {
     private final static int DB_VERSION = 6;
-    private final static String TABLE_NAME = "lightbackup";
+    public final static String TABLE_NAME = "lightbackup";
 
     LightDBHelper(Context context) {
         super(context, "backup", null, DB_VERSION);
@@ -44,7 +44,7 @@ class LightDBHelper extends SQLiteOpenHelper {
         open.close();
     }
 
-    public Map<String, Float> getData(SimpleDateFormat sdf, Date key) {
+    public Map<String, Float> getData(Date key) {
         ContentValues trying = new ContentValues();
         long requestId = key.getTime();
 
@@ -58,7 +58,9 @@ class LightDBHelper extends SQLiteOpenHelper {
         // 업데이트가 되었던 리스트들을 하나씩 가져와서 데이터로 넣는다.
         Cursor cur = open.query(TABLE_NAME, null, "trying=" + Long.toString(requestId), null, null, null, null);
         Map<String, Float> tmp = new HashMap<>();
-        while (cur.moveToNext()) tmp.put(sdf.format(new Date(cur.getLong(1))), cur.getFloat(0));
+        while (cur.moveToNext()) {
+            tmp.put(cur.getString(1), cur.getFloat(0));
+        }
         cur.close();
         open.setTransactionSuccessful();
         open.endTransaction();
@@ -72,17 +74,17 @@ class LightDBHelper extends SQLiteOpenHelper {
         // 새로 수집했던 데이터를 데이터베이스에 추가한다
 
         SQLiteDatabase open = getWritableDatabase();
-        ContentValues trying = new ContentValues();
+        ContentValues updateValue = new ContentValues();
         ContentValues newValue = new ContentValues();
 
-        trying.put("trying", 0);
+        updateValue.put("trying", 0);
 
         newValue.put("trying", 0);
         newValue.put("value", value);
         newValue.put("date", sdf.format(key));
 
         open.beginTransaction();
-        open.update(TABLE_NAME, trying, "trying=" + key.getTime(), null);
+        open.update(TABLE_NAME, updateValue, "trying=" + key.getTime(), null);
         open.insert(TABLE_NAME, null, newValue);
         open.setTransactionSuccessful();
         open.endTransaction();
