@@ -11,8 +11,6 @@ import okhttp3.HttpUrl;
 import org.junit.*;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -55,14 +53,6 @@ public class ServerRequestTest {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(className);
-    }
-
-    private static void setPrivateField(Field field, Object value) throws NoSuchFieldException, IllegalAccessException {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, "");
     }
 
     @Test

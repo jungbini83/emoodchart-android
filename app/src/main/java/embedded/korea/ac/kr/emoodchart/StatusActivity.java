@@ -60,9 +60,9 @@ public class StatusActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-                Uri uri = Uri.parse(APIHelper.genSurveyUrl(new UserInfo(getBaseContext())));
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-				startActivity(browserIntent);
+            Uri uri = Uri.parse(APIHelper.genSurveyUrl(new UserInfo(getBaseContext())));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(browserIntent);
 			}
 		});
 
@@ -71,40 +71,8 @@ public class StatusActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-                mApi.checkUpdate().enqueue(new Callback<ApiResponse<VersionResponse>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<VersionResponse>> call, Response<ApiResponse<VersionResponse>> response) {
-                        //Toast.makeText(getBaseContext(), "어플리케이션이 최신버전입니다.",Toast.LENGTH_LONG).show();
-
-                        int errCode = response.code();
-                        if(errCode == 200)
-                        {
-                            //업데이트 진행
-                            Log.v("data", response.body().toString());
-                            String version = response.body().getResult().getVersion();
-
-                            if(version.equals(BuildConfig.version))
-                            {
-                                Toast.makeText(getBaseContext(), "최신 버전입니다.",Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
-
-                                Toast.makeText(getBaseContext(), "업데이트 페이지로 이동합니다.",Toast.LENGTH_LONG).show();
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(APIHelper.URL_APK));
-                                startActivity(browserIntent);
-                            }
-                        }
-                        else
-                            Toast.makeText(getBaseContext(), "확인에 실패하였습니다.",Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<VersionResponse>> call, Throwable t) {
-//
-                    }
-                });
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(APIHelper.URL_APK));
+            startActivity(browserIntent);
 			}
 		});
 
