@@ -1,1 +1,1 @@
-['push' branch] Push 기능을 지원하는 Android App
+Add Push and notification function in the latest version
