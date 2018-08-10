@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "693569008860",
+    "firebase_url": "https://emoodchart-e9ba6.firebaseio.com",
+    "project_id": "emoodchart-e9ba6",
+    "storage_bucket": "emoodchart-e9ba6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693569008860:android:cb19f85bc1b03eb6",
+        "android_client_info": {
+          "package_name": "embedded.korea.ac.kr.emoodchart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693569008860-tm8ahio2aq8096pmdv6q9437rd8a0sot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaXPYw0I-1fe1Ma4ZFBRt1rUooEuDT9DY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
