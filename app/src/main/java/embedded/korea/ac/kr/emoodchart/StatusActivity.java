@@ -23,6 +23,7 @@ import java.util.Map;
 
 import embedded.korea.ac.kr.emoodchart.api.APIHelper;
 import embedded.korea.ac.kr.emoodchart.api.ApiClient;
+import embedded.korea.ac.kr.emoodchart.api.push.ApiPush;
 import embedded.korea.ac.kr.emoodchart.services.EMCService;
 
 import com.android.volley.Response;
@@ -33,7 +34,7 @@ import com.google.gson.JsonParser;
 
 public class StatusActivity extends Activity {
     private ApiClient mApi;
-    private JsonParser jsonParser;
+    private ApiPush mPush;
 
     @Override
     public void onBackPressed() {}
@@ -44,7 +45,7 @@ public class StatusActivity extends Activity {
         setContentView(R.layout.status);
 
         mApi = APIHelper.createClient();
-        jsonParser = new JsonParser();
+        mPush = new ApiPush(StatusActivity.this);
 
         FirebaseMessaging.getInstance().subscribeToTopic("notice");
 
@@ -93,10 +94,8 @@ public class StatusActivity extends Activity {
         findViewById(R.id.btn_register).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String regId = FirebaseInstanceId.getInstance().getToken();
-                System.out.println("등록 ID : " + regId);
-
-                sendToMobileServer(new UserInfo(getBaseContext()), regId);
+                String regId = FirebaseInstanceId.getInstance().getToken();                                     // Firebase에서 기기에 할당된 Token 받아오기
+                mPush.sendToMobileServer(new UserInfo(getBaseContext()), regId, ApiPush.QUERY_PATID_URL);        // Token을 emoodchart 서버에 등록
             }
         });
 
@@ -105,58 +104,16 @@ public class StatusActivity extends Activity {
         startService(service);
     }
 
-    public void sendToMobileServer(final UserInfo userInfo, final String regId) {
-
-        String url = "http://18.222.248.208:3000/process/adddevice";
-
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    public void onResponse(String response) {
-                        try {
-                            System.out.println("onResponse() 호출됨 : " + response);
-                            JsonObject jsonObject = (JsonObject) jsonParser.parse(response);
-
-                            viewInfoDialog("푸시 서비스 등록 결과", jsonObject.get("message").toString());               // 결과 다이얼로그 띄우기
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                }
-        ) {
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-
-                params.put("userId", String.valueOf(userInfo.getUserId()));
-                params.put("projId", String.valueOf(userInfo.getProjId()));
-                params.put("instId", String.valueOf(userInfo.getInstId()));
-                params.put("regId", regId);
-
-                return params;
-            }
-        };
-
-        request.setShouldCache(false);
-        Volley.newRequestQueue(this).add(request);
-    }
-
     protected void onNewIntent(Intent intent) {
 
-        if (intent != null && intent.getExtras() != null) {
+        if (intent != null && intent.getExtras() != null)
             processIntent(intent);
-        }
 
         super.onNewIntent(intent);
     }
 
     private void processIntent(Intent intent) {
-
         String message = intent.getStringExtra("data");
-
         viewInfoDialog("설문 조사 알람", message);
     }
 
