@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -31,7 +32,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String message = data.get("content");
         String sound = data.get("sound");
 
-        sendPushNotification(title, message + ", sound: " + sound);
+        // StatusActivity 창에서 push 수신에 동의할 경우에만 notification을 받음
+        SharedPreferences push_pf = getSharedPreferences("push", Context.MODE_PRIVATE);
+        if (push_pf.getBoolean("push_notify", true))
+            sendPushNotification(title, message);
     }
 
     private void sendPushNotification(String title, String message) {

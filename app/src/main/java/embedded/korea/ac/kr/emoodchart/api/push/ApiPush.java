@@ -25,11 +25,13 @@ import java.util.Map;
 
 import embedded.korea.ac.kr.emoodchart.UserInfo;
 
+import static embedded.korea.ac.kr.emoodchart.BuildConfig.TEST_WEB_URL;
+
 public class ApiPush {
 
     // 디바이스를 등록하기 위한 테스트 서버 주소
-    public static String QUERY_PATID_URL  = "http://jungbini.com:3000/process/queryPatId";
-    private static String PUSH_URL         = "http://jungbini.com:3000/process/adddevice";
+    public static String QUERY_PATID_URL  = TEST_WEB_URL + "/process/queryPatId";
+    private static String PUSH_URL         = TEST_WEB_URL + "/process/adddevice";
     private static String result;
     private static String patID;
 

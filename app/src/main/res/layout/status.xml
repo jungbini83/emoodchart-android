@@ -63,11 +63,22 @@
         android:id="@+id/button_opensurvey"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:text="설문 조사 페이지"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/pushSwitch"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:checked="true"
+        android:text="Push 수신"
+        android:textSize="16dp" />
 
 </LinearLayout>

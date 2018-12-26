@@ -2,6 +2,7 @@ package embedded.korea.ac.kr.emoodchart;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,6 +39,10 @@ public class StatusActivity extends Activity {
     private ApiClient mApi;
     private ApiPush mPush;
 
+    private Switch pushSwitch;
+
+    public static boolean pushNotification = true;
+
     @Override
     public void onBackPressed() {}
 
@@ -46,6 +53,7 @@ public class StatusActivity extends Activity {
 
         mApi = APIHelper.createClient();
         mPush = new ApiPush(StatusActivity.this);
+        pushSwitch = (Switch)findViewById(R.id.pushSwitch);
 
         FirebaseMessaging.getInstance().subscribeToTopic("notice");
 
@@ -68,6 +76,12 @@ public class StatusActivity extends Activity {
         } else {
             availReboot.setText("불가능 혹은 확인필요");
         }
+
+        SharedPreferences push_pf = getSharedPreferences("push", MODE_PRIVATE);
+        if (push_pf.getBoolean("push_notify", true))
+            pushSwitch.setChecked(true);
+        else
+            pushSwitch.setChecked(false);
 
         // 서베이 이동 버튼 링크
         findViewById(R.id.button_opensurvey).setOnClickListener(new OnClickListener() {
@@ -96,6 +110,15 @@ public class StatusActivity extends Activity {
             public void onClick(View view) {
                 String regId = FirebaseInstanceId.getInstance().getToken();                                     // Firebase에서 기기에 할당된 Token 받아오기
                 mPush.sendToMobileServer(new UserInfo(getBaseContext()), regId, ApiPush.QUERY_PATID_URL);        // Token을 emoodchart 서버에 등록
+            }
+        });
+
+        // 푸시 서비스 수신 스위치
+        ((Switch) findViewById(R.id.pushSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences push_pf = getSharedPreferences("push", Context.MODE_PRIVATE);
+                push_pf.edit().putBoolean("push_notify", b).apply();
             }
         });
 
